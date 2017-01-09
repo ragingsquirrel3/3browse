@@ -74,9 +74,18 @@
       
     </div>
     <a-scene>
+
       <a-entity class="target" scale="4 4 4" position="-9 -14 -13">
       </a-entity>
       <a-sky color="#000000"></a-sky>
+      <a-box id="loadingTarget" color="white" depth="0.5" height="0.5" width="0.5" position="0 2 -2">
+        <a-animation attribute="rotation"
+                 dur="1000"
+                 fill="forwards"
+                 to="180 360 0"
+                 repeat="indefinite">
+        </a-animation>
+      </a-box>
       <a-entity tracked-controls="controller: 0; id: OpenVR Gamepad"></a-entity>
       <a-entity light="type: ambient; color: #BBB"></a-entity>
       <a-entity>
@@ -90,8 +99,10 @@
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript">
       var RADIUS = 0.02;
-      var SEGS = 8;
+      var SEGS = 16;
       function renderFromData (data) {
+        // remove loader
+        d3.select("#loadingTarget").remove();
         var cylinderData = formatCylinderData(data);
         var target = d3.select(".target");
         var cylinders = target.selectAll('.region').data(cylinderData);
@@ -182,8 +193,10 @@
           return formattedApiData;
         }
         var data = getExampleData();
-        // TEMP
-        renderFromData(data);
+        // delay
+        setTimeout(function () {
+          renderFromData(data);
+        }, 1000);
 
         // start playing with annotations
         var annotationData = [
