@@ -1,0 +1,10 @@
+{
+  "name": "VBrowse",
+  "description": "A sample Flask app on Heroku",
+  "keywords": [
+    "flask",
+    "python"
+  ],
+  "addons": [
+  ]
+}
