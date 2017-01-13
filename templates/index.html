@@ -2,9 +2,10 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>A-Frame VR Genome Mockups</title>
+    <title>Prototype 3D Genome Browser |  VBrowse</title>
     <meta name="description" content="A-Frame VR Genome Mockups">
-    <script src="https://aframe.io/releases/0.4.0/aframe.min.js"></script>
+    <script src="/public/aframe.min.js"></script>
+    <script src="/public/aframe-gamepad-controls.min.js"></script>
     <script src="https://rawgit.com/ngokevin/aframe-look-at-component/master/dist/aframe-look-at-component.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -86,10 +87,9 @@
                  repeat="indefinite">
         </a-animation>
       </a-box>
-      <a-entity tracked-controls="controller: 0; id: OpenVR Gamepad"></a-entity>
       <a-entity light="type: ambient; color: #BBB"></a-entity>
       <a-entity>
-        <a-camera>
+        <a-camera gamepad-controls>
           <a-light light="type: directional; color: #EEE; intensity: 0.5" position="0 0 0" rotation="0 0 0" target="#directionaltarget">
             <a-entity id="directionaltarget" position="0 0 -1"></a-entity>
           </a-light>
