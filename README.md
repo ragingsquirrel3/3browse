@@ -9,6 +9,8 @@ VBrowse
 
 * `pip install -r requirements.txt`
 
+* `npm install`
+
 * `python app.py`
 
 ## Deploy

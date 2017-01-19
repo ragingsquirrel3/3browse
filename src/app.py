@@ -1,8 +1,18 @@
 import os
 
 from flask import Flask, render_template, request, redirect, send_from_directory, url_for
+from flask_webpack import Webpack
 
+# init app
 app = Flask(__name__)
+# configure with webpack
+webpack = Webpack()
+params = {
+    'DEBUG': True,
+    'WEBPACK_MANIFEST_PATH': './build/manifest.json'
+}
+app.config.update(params)
+webpack.init_app(app)
 
 @app.route('/', methods=['GET'])
 def index():

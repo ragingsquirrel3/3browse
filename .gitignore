@@ -1,5 +1,7 @@
 venv
-build
+node_modules
+src/build
+
 *~
 *.pyc
 *.DS_Store
