@@ -1,0 +1,34 @@
+.autoInput {
+  border: none !important;
+}
+
+.suggestionsContainer {
+  position: absolute;
+  width: 100%;
+}
+
+.suggestionsList {
+  margin: 0;
+  background: white;
+}
+
+.suggestion {
+  padding: 0.1rem 0.5rem;
+  background: white;
+}
+
+.suggestionFocused {
+  background: #E8F2FE;
+}
+
+.autoContainer .suggestionsContainer {
+  display: none;
+}
+
+.autoContainerOpen .suggestionsContainer {
+  display: block !important;
+}
+
+.suggestionFocused {
+  background: #E8F2FE;
+}

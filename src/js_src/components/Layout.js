@@ -3,6 +3,8 @@ import Autosuggest from 'react-autosuggest';
 import React, { Component } from 'react';
 import d3 from 'd3';
 
+import style from './style.css';
+
 const DATA_URL = '/public/geneData_2.0.json';
 const GENE_NAME_INDEX = 4;
 const MIN_SEARCH_CHAR = 2;
@@ -64,6 +66,9 @@ class Layout extends Component {
     });
   }
 
+  onSuggestionSelected() {
+  }
+
   renderSuggestion(d) {
     return (
       <div>
@@ -79,9 +84,17 @@ class Layout extends Component {
       value: this.state.value,
       onChange: this.onChange.bind(this)
     };
+    let _theme = {
+      // container: style.autoContainer,
+      // containerOpen: style.autoContainerOpen,
+      input: style.autoInput,
+      suggestionsContainer: style.suggestionsContainer,
+      suggestionsList: style.suggestionsList,
+      suggestion: style.suggestion,
+      suggestionFocused: style.suggestionFocused
+    };
     return (
       <div>
-        <i className='fa fa-search searchIcon' />
         <ul className='menu'>
           <li>
             <Autosuggest
@@ -89,8 +102,10 @@ class Layout extends Component {
               inputProps={inputProps}
               onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
               onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+              onSuggestionSelected={this.onSuggestionSelected}
               renderSuggestion={this.renderSuggestion}
               suggestions={this.state.suggestions}
+              theme={_theme}
             />
           </li>
         </ul>
