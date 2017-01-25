@@ -9,8 +9,10 @@ const DATA_URL = '/data';
 class VizComp extends Component {
   componentDidMount() {
     this.drawBoilerplateData();
+    document.getElementById('eventProxy').addEventListener('click', () => {
+      this.fetchAndRenderData();
+    });
   }
-
 
   fetchAndRenderData() {
     d3.json(DATA_URL, (err, json) => {
@@ -25,6 +27,7 @@ class VizComp extends Component {
   }
 
   render() {
+    console.info(this.props);
     return <span />;
   }
 }

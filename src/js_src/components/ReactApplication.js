@@ -71,6 +71,7 @@ class Layout extends Component {
 
   onSuggestionSelected(event, { suggestion }) {
     let d = suggestion;
+    document.getElementById('eventProxy').click();
     this.setState({
       positon: `${d[1]} ${d[2]} ${d[3]}`,
       value: d[GENE_NAME_INDEX]
