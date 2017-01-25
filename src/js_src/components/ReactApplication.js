@@ -70,8 +70,11 @@ class Layout extends Component {
   }
 
   onSuggestionSelected(event, { suggestion }) {
-    let rawGeneData = suggestion;
-    this.setState({ value: rawGeneData[GENE_NAME_INDEX] });
+    let d = suggestion;
+    this.setState({
+      positon: `${d[1]} ${d[2]} ${d[3]}`,
+      value: d[GENE_NAME_INDEX]
+    });
   }
 
   renderSuggestion(d) {

@@ -10,6 +10,7 @@ export default function renderFromData (rawData) {
   d3.select("#loadingTarget").remove();
   var cylinderData = formatCylinderData(data);
   var target = d3.select(".target");
+  target.html("");
   var cylinders = target.selectAll('.region').data(cylinderData);
   cylinders.enter().append('a-entity')
     .attr({
