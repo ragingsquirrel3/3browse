@@ -4,12 +4,16 @@ import d3 from 'd3';
 var RADIUS = 0.02;
 var SEGS = 16;
 
-export default function renderFromData (rawData) {
+export default function renderFromData (rawData, isClear) {
   var data = formatData(rawData);
   // remove loader
-  d3.select("#loadingTarget").remove();
-  var cylinderData = formatCylinderData(data);
   var target = d3.select(".target");
+  d3.select("#loadingTarget").attr("visible", false);
+  if (isClear) {
+    target.attr("position", "-9 -5 -8");
+  }
+  var cylinderData = formatCylinderData(data);
+  
   target.html("");
   var cylinders = target.selectAll('.region').data(cylinderData);
   cylinders.enter().append('a-entity')

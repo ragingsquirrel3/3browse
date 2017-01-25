@@ -14,9 +14,15 @@ class VizComp extends Component {
     });
   }
 
+  load() {
+    d3.select('#loadingTarget').attr('visible', true);
+    d3.select('.target').html('');
+  }
+
   fetchAndRenderData() {
+    this.load();
     d3.json(DATA_URL, (err, json) => {
-      renderViz(json);
+      renderViz(json, true);
     });
   }
 
