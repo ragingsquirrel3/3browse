@@ -5,8 +5,3 @@ build:
 
 run:
 	python src/app.py
-
-setup-dev:
-	source venv/bin/active
-	npm run build
-	npm start
