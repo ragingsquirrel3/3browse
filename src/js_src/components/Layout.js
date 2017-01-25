@@ -1,6 +1,11 @@
 /*eslint-disable react/no-set-state */
 import Autosuggest from 'react-autosuggest';
 import React, { Component } from 'react';
+import d3 from 'd3';
+
+const DATA_URL = '/public/geneData_2.0.json';
+const GENE_NAME_INDEX = 4;
+const MIN_SEARCH_CHAR = 2;
 
 // <input className='searchInput' placeholder='Search' type='search' />
 class Layout extends Component {
@@ -10,6 +15,29 @@ class Layout extends Component {
       value: '',
       suggestions: []
     };
+  }
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  parseData(raw) {
+    let genes = [];
+    let chroms = Object.keys(raw);
+    chroms.forEach( (chrom) => {
+      let chromData = raw[chrom];
+      let chromGenes = Object.keys(chromData);
+      chromGenes.forEach( (gene) => {
+        genes.push(chromData[gene]);
+      });
+    });
+    return genes;
+  }
+
+  fetchData() {
+    d3.json(DATA_URL, (err, json) => {
+      this.rawData = this.parseData(json);
+    });
   }
 
   onChange(event, { newValue }) {
@@ -25,8 +53,11 @@ class Layout extends Component {
   }
 
   onSuggestionsFetchRequested(input) {
-    let matches = TEMP_GENES.filter( d => {
-      return d.name.toLowerCase().match(input.value.toLowerCase());
+    if (input.value.length < MIN_SEARCH_CHAR) {
+      return;
+    }
+    let matches = this.rawData.filter( d => {
+      return d[GENE_NAME_INDEX].toLowerCase().match(input.value.toLowerCase());
     });
     this.setState({
       suggestions: matches
@@ -36,7 +67,7 @@ class Layout extends Component {
   renderSuggestion(d) {
     return (
       <div>
-        {d.name}
+        {d[GENE_NAME_INDEX]}
       </div>
     );
   }
@@ -69,12 +100,3 @@ class Layout extends Component {
 }
 
 export default Layout;
-
-const TEMP_GENES = [
-  {
-    name: 'ABC123',
-  },
-  {
-    name: 'XYZ123'
-  }
-];
