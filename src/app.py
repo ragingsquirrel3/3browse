@@ -1,7 +1,9 @@
 import os
-
-from flask import Flask, render_template, request, redirect, send_from_directory, url_for
+from flask import Flask, render_template, request, redirect, send_from_directory, url_for, jsonify
 from flask_webpack import Webpack
+import requests
+import json
+import random
 
 # init app
 app = Flask(__name__)
@@ -17,6 +19,18 @@ webpack.init_app(app)
 @app.route('/', methods=['GET'])
 def index():
   return render_template('index.html')
+
+@app.route('/data')
+def data():
+    random_chrom = random.randint(1, 23)
+    url = 'http://1kgenome.exascale.info/3d?m=normal&chr=' + str(random_chrom) + '&xstart=1&xend=3&zstart=1&zend=3&ystart=1&yend=3'
+    response = requests.get(url)
+    data = json.loads(response.text[1:-1])
+    original = data['data']
+    formatted = []
+    for strand in original:
+      formatted = formatted + strand[1]
+    return jsonify(formatted)
 
 # make static assets available
 @app.route('/public/<path:path>')

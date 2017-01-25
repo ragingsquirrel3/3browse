@@ -113,7 +113,7 @@ class Layout extends Component {
             />
           </li>
         </ul>
-        <VizComp />
+        <VizComp position={this.state.position} />
       </div>
     );
   }
