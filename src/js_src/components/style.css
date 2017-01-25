@@ -1,5 +1,17 @@
+.searchUberContainer {
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  top: 0.7rem;
+  left: 0.5rem;
+}
+
 .autoInput {
   border: none !important;
+  margin-right: 0 !important;
+  padding-left: 1.75rem !important;
 }
 
 .suggestionsContainer {

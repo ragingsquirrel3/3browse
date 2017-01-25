@@ -42,9 +42,10 @@ class Layout extends Component {
     });
   }
 
-  onChange(event, { newValue }) {
+  onChange(event, obj) {
+    if (obj.method !== 'type') return;
     this.setState({
-      value: newValue
+      value: obj.newValue
     });
   }
 
@@ -59,14 +60,16 @@ class Layout extends Component {
       return;
     }
     let matches = this.rawData.filter( d => {
-      return d[GENE_NAME_INDEX].toLowerCase().match(input.value.toLowerCase());
+      return d[GENE_NAME_INDEX].toLowerCase().startsWith(input.value.toLowerCase());
     });
     this.setState({
       suggestions: matches
     });
   }
 
-  onSuggestionSelected() {
+  onSuggestionSelected(event, { suggestion }) {
+    let rawGeneData = suggestion;
+    this.setState({ value: rawGeneData[GENE_NAME_INDEX] });
   }
 
   renderSuggestion(d) {
@@ -85,8 +88,6 @@ class Layout extends Component {
       onChange: this.onChange.bind(this)
     };
     let _theme = {
-      // container: style.autoContainer,
-      // containerOpen: style.autoContainerOpen,
       input: style.autoInput,
       suggestionsContainer: style.suggestionsContainer,
       suggestionsList: style.suggestionsList,
@@ -96,13 +97,14 @@ class Layout extends Component {
     return (
       <div>
         <ul className='menu'>
-          <li>
+          <li className={style.searchUberContainer}>
+            <i className={`fa fa-search ${style.searchIcon}`} />
             <Autosuggest
               getSuggestionValue={getSuggestionValue}
               inputProps={inputProps}
+              onSuggestionSelected={this.onSuggestionSelected.bind(this)}
               onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
-              onSuggestionSelected={this.onSuggestionSelected}
+              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}  
               renderSuggestion={this.renderSuggestion}
               suggestions={this.state.suggestions}
               theme={_theme}
