@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import d3 from 'd3';
 
 import style from './style.css';
+import VizComp from './VizComp';
 
 const DATA_URL = '/public/geneData_2.0.json';
 const GENE_NAME_INDEX = 4;
@@ -14,6 +15,7 @@ class Layout extends Component {
   constructor() {
     super();
     this.state = {
+      position: '0 0 0',
       value: '',
       suggestions: []
     };
@@ -111,6 +113,7 @@ class Layout extends Component {
             />
           </li>
         </ul>
+        <VizComp />
       </div>
     );
   }

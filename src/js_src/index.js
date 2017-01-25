@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import Layout from './components/layout';
+import ReactApplication from './components/ReactApplication';
 
 // renders react application
-render(<Layout />, document.getElementById('vbrowse-target'));
+render(<ReactApplication />, document.getElementById('vbrowse-target'));
