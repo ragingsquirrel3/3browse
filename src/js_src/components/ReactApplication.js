@@ -15,6 +15,7 @@ class Layout extends Component {
   constructor() {
     super();
     this.state = {
+      chrom: 1,
       position: '0 0 0',
       value: '',
       suggestions: []
@@ -23,7 +24,17 @@ class Layout extends Component {
 
   componentDidMount() {
     this.fetchData();
+    setInterval( () => {
+      this.setPositionFromCamera();
+    }, 3000);
   }
+
+  setPositionFromCamera() {
+    let el = document.getElementById('vbrowse-camera');
+    let obj = el.getAttribute('position');
+    this.setState({ position: `${obj.x} ${obj.y} ${obj.z}` });
+  }
+
 
   parseData(raw) {
     let genes = [];
@@ -117,7 +128,7 @@ class Layout extends Component {
             />
           </li>
         </ul>
-        <VizComp position={this.state.position} />
+        <VizComp chrom={this.state.chrom} position={this.state.position} />
       </div>
     );
   }

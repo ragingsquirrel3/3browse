@@ -8,10 +8,17 @@ const DATA_URL = '/data';
 
 class VizComp extends Component {
   componentDidMount() {
-    this.drawBoilerplateData();
+    // this.drawBoilerplateData();
     document.getElementById('eventProxy').addEventListener('click', () => {
       this.fetchAndRenderData();
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.position !== prevProps.position) {
+      console.info('update ', this.props.position);
+      this.fetchAndRenderData();
+    }
   }
 
   load() {
@@ -22,7 +29,10 @@ class VizComp extends Component {
   fetchAndRenderData() {
     this.load();
     // construct API URL from position
-    d3.json(DATA_URL, (err, json) => {
+    let p = this.props.position.split(' ');
+    let chrom = this.props.chrom;
+    let url = `${DATA_URL}?chrom=${chrom}&x=${p[0]}&y=${p[1]}&z=${p[2]}`;
+    d3.json(url, (err, json) => {
       renderViz(json, true);
     });
   }
@@ -34,12 +44,12 @@ class VizComp extends Component {
   }
 
   render() {
-    console.info(this.props);
     return <span />;
   }
 }
 
 VizComp.propTypes = {
+  chrom: React.PropTypes.number,
   position: React.PropTypes.string
 };
 
