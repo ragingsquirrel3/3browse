@@ -22,8 +22,15 @@ def index():
 
 @app.route('/data')
 def data():
+    SPREAD = 3
+    DEFAULT_POS_I = 0
+    a = request.args
+    chrom = a.get('chrom') if a.get('chrom') else random.randint(1, 23)
+    x = a.get('x') if a.get('x') else DEFAULT_POS_I
+    y = a.get('y') if a.get('y') else DEFAULT_POS_I
+    z = a.get('z') if a.get('z') else DEFAULT_POS_I
     random_chrom = random.randint(1, 23)
-    url = 'http://1kgenome.exascale.info/3d?m=normal&chr=' + str(random_chrom) + '&xstart=1&xend=3&zstart=1&zend=3&ystart=1&yend=3'
+    url = 'http://1kgenome.exascale.info/3d?m=normal&chr=' + str(chrom) + '&xstart=1&xend=3&zstart=1&zend=3&ystart=1&yend=3'
     response = requests.get(url)
     data = json.loads(response.text[1:-1])
     original = data['data']

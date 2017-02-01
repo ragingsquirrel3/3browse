@@ -21,6 +21,7 @@ class VizComp extends Component {
 
   fetchAndRenderData() {
     this.load();
+    // construct API URL from position
     d3.json(DATA_URL, (err, json) => {
       renderViz(json, true);
     });
