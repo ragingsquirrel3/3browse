@@ -11,7 +11,7 @@ import numpy.linalg as npl
 
 import networkx as nx
 
-from visualizer import visualize
+# from visualizer import visualize
 
 
 def contacts2distances(contacts):
@@ -139,11 +139,13 @@ def main():
 
         contacts = deconstruct(coords, epsilon=0.51)
         rec_coords = apply_shrec3d(contacts)
+        print('contacts')
+        print(contacts)
 
-        visualize([
-            (coords, 'original points'),
-            (rec_coords, 'reconstructed points')
-        ])
+        # visualize([
+        #     (coords, 'original points'),
+        #     (rec_coords, 'reconstructed points')
+        # ])
     else:
         fname = sys.argv[1]
 
