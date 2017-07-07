@@ -2,8 +2,16 @@ import os
 from flask import Flask, render_template, request, redirect, send_from_directory, url_for, jsonify
 from flask_webpack import Webpack
 import requests
+import redis
 import json
 import random
+
+# redis config
+try:
+  REDIS_SERVER = int(os.environ.get('REDIS_URL', 5000))
+  r = redis.StrictRedis(host='localhost', port=6379, db=0)
+except Exception, e:
+  print 'error connecting to redis'
 
 # init app
 app = Flask(__name__)
@@ -38,12 +46,20 @@ def data():
     zend = z + SPREAD
     random_chrom = random.randint(1, 23)
     url = 'http://1kgenome.exascale.info/3d?m=normal&chr=' + str(chrom) + '&xstart=' + str(xstart) + '&xend=' + str(xend) + '&ystart=' + str(ystart) + '&yend=' + str(yend) + '&zstart=' + str(zstart) + '&zend=' + str(zend)
-    response = requests.get(url)
-    data = json.loads(response.text[1:-1])
-    original = data['data']
-    formatted = []
-    for strand in original:
-      formatted = formatted + strand[1]
+    # try to cache
+    cached = r.get(url)
+    print 'to cache? '
+    print cached
+    if cached is None:
+      response = requests.get(url)
+      data = json.loads(response.text[1:-1])
+      original = data['data']
+      formatted = []
+      for strand in original:
+        formatted = formatted + strand[1]
+      r.set(url, formatted)
+    else:
+      formatted = json.loads(cached)
     return jsonify(formatted)
 
 # make static assets available
