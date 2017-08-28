@@ -11,7 +11,7 @@ import numpy.linalg as npl
 
 import networkx as nx
 
-# from visualizer import visualize
+from visualizer import visualize
 
 
 def contacts2distances(contacts):
@@ -115,6 +115,10 @@ def apply_shrec3d(contacts):
     return coordinates
 
 
+def read_line(d):
+    strings = d.split()
+    return [float(d) for d in strings]
+
 def main():
     """ Main function
     """
@@ -129,23 +133,17 @@ def main():
                         [3.5,0.5,0]
         ])
 
-        #coords = np.array([
-        #    [1,0,0],
-        #    [1.5,0,0],
-        #    [2,0,0],
-        #    [2.5,0,0],
-        #    [3,0,0]
-        #])
+        test_file = open('./src/test_data.txt')
+        test_contacts_data = list(map(lambda x: read_line(x), test_file.readlines()))
+        test_contacts_data = np.array(test_contacts_data)
 
-        contacts = deconstruct(coords, epsilon=0.51)
-        rec_coords = apply_shrec3d(contacts)
-        print('contacts')
-        print(contacts)
+        # contacts = deconstruct(coords, epsilon=0.51)
+        # print(type(contacts))
+        rec_coords = apply_shrec3d(test_contacts_data)
 
-        # visualize([
-        #     (coords, 'original points'),
-        #     (rec_coords, 'reconstructed points')
-        # ])
+        visualize([
+            (rec_coords, 'reconstructed points')
+        ])
     else:
         fname = sys.argv[1]
 
