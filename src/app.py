@@ -28,40 +28,6 @@ webpack.init_app(app)
 def index():
   return render_template('index.html')
 
-@app.route('/data')
-def data():
-    SPREAD = 1
-    DEFAULT_POS_I = 2
-    a = request.args
-    chrom = a.get('chrom') if a.get('chrom') else random.randint(1, 23)
-    x = float(a.get('x')) if float(a.get('x')) else DEFAULT_POS_I
-    y = float(a.get('y')) if float(a.get('y')) else DEFAULT_POS_I
-    z = float(a.get('z')) if float(a.get('z')) else DEFAULT_POS_I
-    print x - SPREAD
-    xstart = x - SPREAD
-    xend = x + SPREAD
-    ystart = y - SPREAD
-    yend = y + SPREAD
-    zstart = z - SPREAD
-    zend = z + SPREAD
-    random_chrom = random.randint(1, 23)
-    url = 'http://1kgenome.exascale.info/3d?m=normal&chr=' + str(chrom) + '&xstart=' + str(xstart) + '&xend=' + str(xend) + '&ystart=' + str(ystart) + '&yend=' + str(yend) + '&zstart=' + str(zstart) + '&zend=' + str(zend)
-    # try to cache
-    cached = r.get(url)
-    print 'to cache? '
-    print cached
-    if cached is None:
-      response = requests.get(url)
-      data = json.loads(response.text[1:-1])
-      original = data['data']
-      formatted = []
-      for strand in original:
-        formatted = formatted + strand[1]
-      r.set(url, formatted)
-    else:
-      formatted = json.loads(cached)
-    return jsonify(formatted)
-
 # make static assets available
 @app.route('/public/<path:path>')
 def send_static(path):

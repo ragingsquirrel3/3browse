@@ -4,11 +4,12 @@ import d3 from 'd3';
 import renderViz from '../lib/renderViz';
 
 const INIT_DELAY = 500;
-const DATA_URL = '/data';
+const DATA_URL = '/public/data/example_data.json';
 
 class VizComp extends Component {
   componentDidMount() {
     // this.drawBoilerplateData();
+    this.fetchAndRenderData();
     document.getElementById('eventProxy').addEventListener('click', () => {
       this.fetchAndRenderData();
     });
@@ -16,7 +17,6 @@ class VizComp extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.position !== prevProps.position) {
-      console.info('update ', this.props.position);
       this.fetchAndRenderData();
     }
   }
@@ -29,10 +29,13 @@ class VizComp extends Component {
   fetchAndRenderData() {
     this.load();
     // construct API URL from position
-    let p = this.props.position.split(' ');
-    let chrom = this.props.chrom;
-    let url = `${DATA_URL}?chrom=${chrom}&x=${p[0]}&y=${p[1]}&z=${p[2]}`;
-    d3.json(url, (err, json) => {
+    // let p = this.props.position.split(' ');
+    // let chrom = this.props.chrom;
+    // to format more params
+    // let url = `${DATA_URL}?chrom=${chrom}&x=${p[0]}&y=${p[1]}&z=${p[2]}`;
+    // or
+    // simple
+    d3.json(DATA_URL, (err, json) => {
       renderViz(json, true);
     });
   }

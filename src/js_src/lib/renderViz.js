@@ -97,7 +97,7 @@ function formatData(raw) {
   var formattedApiData = raw.map( function(d, i) {
     var endIndex = Math.min(raw.length - 1, i + 1);
     var _end = raw[endIndex][1];
-    return { start: d[1], end: _end, x: d[2], y: d[3], z: d[4] };
+    return { start: d[1], end: _end, x: d[0], y: d[1], z: d[2] };
   });
   return formattedApiData;
 }
