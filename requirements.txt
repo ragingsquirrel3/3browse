@@ -12,3 +12,4 @@ requests==2.13.0
 numpy
 matplotlib
 networkx
+flask-compress==1.4.0

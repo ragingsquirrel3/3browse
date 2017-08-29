@@ -5,6 +5,7 @@ import requests
 import redis
 import json
 import random
+from flask_compress import Compress
 
 # redis config
 try:
@@ -15,6 +16,7 @@ except Exception, e:
 
 # init app
 app = Flask(__name__)
+Compress(app)
 # configure with webpack
 webpack = Webpack()
 params = {
@@ -32,6 +34,13 @@ def index():
 @app.route('/public/<path:path>')
 def send_static(path):
     return send_from_directory('../public', path)
+
+# cache a la https://stackoverflow.com/questions/23112316/using-flask-how-do-i-modify-the-cache-control-header-for-all-output
+@app.after_request
+def add_header(response):
+    # 12 hours
+    response.cache_control.max_age = 43200
+    return response
 
 if __name__ == '__main__':
   port = int(os.environ.get('PORT', 5000))
