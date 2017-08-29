@@ -3,12 +3,11 @@ import d3 from 'd3';
 
 import renderViz from '../lib/renderViz';
 
-const INIT_DELAY = 500;
+// const INIT_DELAY = 500;
 const DATA_URL = '/public/data/example_data.json';
 
 class VizComp extends Component {
   componentDidMount() {
-    // this.drawBoilerplateData();
     this.fetchAndRenderData();
     document.getElementById('eventProxy').addEventListener('click', () => {
       this.fetchAndRenderData();
@@ -38,12 +37,6 @@ class VizComp extends Component {
     d3.json(DATA_URL, (err, json) => {
       renderViz(json, true);
     });
-  }
-
-  drawBoilerplateData() {
-    setTimeout( () => {
-      renderViz(window.BOOTSTRAP_DATA);
-    }, INIT_DELAY);
   }
 
   render() {
