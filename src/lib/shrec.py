@@ -5,6 +5,7 @@ Python implementation of the ShRec3D algorithm
 from __future__ import division, print_function
 
 import sys
+import json
 
 import numpy as np
 import numpy.linalg as npl
@@ -123,24 +124,16 @@ def main():
     """ Main function
     """
     if len(sys.argv) == 1:
-        # simple example
-        coords = np.array([
-            [1.0,0,0],                  [1.0,1.0,0],
-            [1.5,0,0],  [1.5,0.5,0],    [1.5,1.0,0],
-            [2.0,0,0],                  [2.0,1.0,0],
-            [2.5,0,0],                  [2.5,1.0,0],
-            [3.0,0,0],  [3.0,0.5,0],    [3.0,1.0,0],
-                        [3.5,0.5,0]
-        ])
-
+        # open test_data.txt contact map, run model and save to example_data.json
         test_file = open('./src/test_data.txt')
         test_contacts_data = list(map(lambda x: read_line(x), test_file.readlines()))
         test_contacts_data = np.array(test_contacts_data)
-
-        # contacts = deconstruct(coords, epsilon=0.51)
-        # print(type(contacts))
+        # run shrec3d 3d model builder
         rec_coords = apply_shrec3d(test_contacts_data)
-
+        # write to data file
+        f = open('./src/data/example_data.json', 'w')
+        f.write(json.dumps(rec_coords.tolist()))
+        # optional, show in python viz
         visualize([
             (rec_coords, 'reconstructed points')
         ])
