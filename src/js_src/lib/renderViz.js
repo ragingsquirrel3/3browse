@@ -94,7 +94,7 @@ export default function renderFromData (rawData, isClear) {
 }
 
 function formatData(raw) {
-  raw = raw.slice(100);
+  raw = raw.slice(10);
   // calc scale and regulate to 3d scale in meters
   const DISTANCE = 10;
   let minN = d3.min(raw, d => {
@@ -103,11 +103,31 @@ function formatData(raw) {
   let maxN = d3.max(raw, d => {
     return Math.max(d[0], d[1], d[2]);
   });
-  let distanceScale = d3.scale.linear().domain([minN, maxN]).range([-DISTANCE, DISTANCE]);
-  var formattedApiData = raw.map( function(d, i) {
-    var endIndex = Math.min(raw.length - 1, i + 1);
-    var _end = raw[endIndex][1];
-    return { start: d[1], end: _end, x: distanceScale(d[0]) - 10, y: distanceScale(d[1]) - 10, z: distanceScale(d[2]) + 10 };
+  let mx = d3.median(raw, d => {
+    return d[0];
   });
+  let my = d3.median(raw, d => {
+    return d[1];
+  });
+  let mz = d3.median(raw, d => {
+    return d[2];
+  });
+
+  let distanceScale = d3.scale.linear().domain([minN, maxN]).range([-1 * DISTANCE, DISTANCE]);
+  let distanceTransform = d => {
+    return {
+      x: distanceScale(d[0] - 49) - 10,
+      y: distanceScale(d[1] + 262) - 10,
+      z: distanceScale(d[2] + 184142) - 10
+    };
+  };
+  // console.info(distanceScale(mx), distanceScale(my), distanceScale(mz));
+  // console.info(distanceScale(mx));
+  var formattedApiData = raw.map( function(d, i) {
+    return distanceTransform(d);
+  });
+  for (var i = formattedApiData.length - 1; i >= 0; i--) {
+    console.info(formattedApiData[i]);
+  }
   return formattedApiData;
 }
