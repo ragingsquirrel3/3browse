@@ -94,10 +94,20 @@ export default function renderFromData (rawData, isClear) {
 }
 
 function formatData(raw) {
+  raw = raw.slice(100);
+  // calc scale and regulate to 3d scale in meters
+  const DISTANCE = 10;
+  let minN = d3.min(raw, d => {
+    return Math.min(d[0], d[1], d[2]);
+  });
+  let maxN = d3.max(raw, d => {
+    return Math.max(d[0], d[1], d[2]);
+  });
+  let distanceScale = d3.scale.linear().domain([minN, maxN]).range([-DISTANCE, DISTANCE]);
   var formattedApiData = raw.map( function(d, i) {
     var endIndex = Math.min(raw.length - 1, i + 1);
     var _end = raw[endIndex][1];
-    return { start: d[1], end: _end, x: d[0], y: d[1], z: d[2] };
+    return { start: d[1], end: _end, x: distanceScale(d[0]) - 10, y: distanceScale(d[1]) - 10, z: distanceScale(d[2]) + 10 };
   });
   return formattedApiData;
 }

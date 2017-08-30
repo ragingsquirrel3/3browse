@@ -24,9 +24,9 @@ class Layout extends Component {
 
   componentDidMount() {
     this.fetchData();
-    setInterval( () => {
-      this.setPositionFromCamera();
-    }, 3000);
+    // setInterval( () => {
+    //   this.setPositionFromCamera();
+    // }, 3000);
   }
 
   setPositionFromCamera() {
