@@ -4,7 +4,7 @@ import d3 from 'd3';
 import renderViz from '../lib/renderViz';
 
 // const INIT_DELAY = 500;
-const DATA_URL = '/public/data/example_data.json';
+const DATA_URL = '/public/data/example_yeast_data.json';
 
 class VizComp extends Component {
   componentDidMount() {

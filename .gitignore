@@ -5,3 +5,5 @@ src/build/main.*
 *~
 *.pyc
 *.DS_Store
+
+npm-debug.log

@@ -125,7 +125,7 @@ def main():
     """
     if len(sys.argv) == 1:
         # open test_data.txt contact map, run model and save to example_data.json
-        test_file = open('./src/test_data.txt')
+        test_file = open('./src/data/test_data.txt')
         test_contacts_data = list(map(lambda x: read_line(x), test_file.readlines()))
         test_contacts_data = np.array(test_contacts_data)
         # run shrec3d 3d model builder

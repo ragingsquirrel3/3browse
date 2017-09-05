@@ -5,3 +5,6 @@ build:
 
 run:
 	python src/app.py
+
+process-data:
+	python src/lib/process_coordinates.py

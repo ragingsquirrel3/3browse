@@ -1,16 +1,16 @@
-/*eslint-disable  no-unused-vars, quotes,  */
+/*eslint-disable  no-unused-vars, quotes, mquote */
 import d3 from 'd3';
 
-var RADIUS = 0.02;
+var RADIUS = 1;
 var SEGS = 16;
 
 export default function renderFromData (rawData, isClear) {
   var data = formatData(rawData);
   // remove loader
-  var target = d3.select(".target");
-  d3.select("#loadingTarget").attr("visible", false);
+  var target = d3.select('.target');
+  d3.select('#loadingTarget').attr('visible', false);
   if (isClear) {
-    target.attr("position", "-9 -5 -8");
+    target.attr('position', '-9 -5 -8');
   }
   var cylinderData = formatCylinderData(data);
   
@@ -45,7 +45,7 @@ export default function renderFromData (rawData, isClear) {
       radius: RADIUS,
       "segments-width": SEGS,
       "segments-height": SEGS,
-      position: function(d) { return d.lookPos; }
+      position: function(d) { console.info(d); return d.lookPos; }
     });
   elbows.exit().remove();
 
@@ -93,41 +93,33 @@ export default function renderFromData (rawData, isClear) {
   }
 }
 
-function formatData(raw) {
-  raw = raw.slice(10);
+function formatData(_raw) {
+  let raw = _raw.slice(0, 10);
   // calc scale and regulate to 3d scale in meters
   const DISTANCE = 10;
-  let minN = d3.min(raw, d => {
-    return Math.min(d[0], d[1], d[2]);
-  });
-  let maxN = d3.max(raw, d => {
-    return Math.max(d[0], d[1], d[2]);
-  });
-  let mx = d3.median(raw, d => {
-    return d[0];
-  });
-  let my = d3.median(raw, d => {
-    return d[1];
-  });
-  let mz = d3.median(raw, d => {
-    return d[2];
-  });
-
-  let distanceScale = d3.scale.linear().domain([minN, maxN]).range([-1 * DISTANCE, DISTANCE]);
+  // calc max spread of data
+  let extentX = d3.extent(raw, d => d.x);
+  let extentY = d3.extent(raw, d => d.y);
+  let extentZ = d3.extent(raw, d => d.z);
+  let deltaX = Math.abs(extentX[0] -  extentX[1]);
+  let deltaY = Math.abs(extentY[0] -  extentY[1]);
+  let deltaZ = Math.abs(extentZ[0] -  extentZ[1]);
+  let maxDelta = Math.max(deltaX, deltaY, deltaZ);
+  // calc medians to properly transform
+  let mx = d3.median(raw, d => d.x);
+  let my = d3.median(raw, d => d.y);
+  let mz = d3.median(raw, d => d.z);
+  let distanceScale = d3.scale.linear().domain([0, maxDelta]).range([-DISTANCE, DISTANCE]);
   let distanceTransform = d => {
     return {
-      x: distanceScale(d[0] - 49) - 10,
-      y: distanceScale(d[1] + 262) - 10,
-      z: distanceScale(d[2] + 184142) - 10
+      x: Math.round(d.x - mx),
+      y: Math.round(d.y - my),
+      z: Math.round(d.z - mz - 5)
     };
   };
-  // console.info(distanceScale(mx), distanceScale(my), distanceScale(mz));
-  // console.info(distanceScale(mx));
   var formattedApiData = raw.map( function(d, i) {
     return distanceTransform(d);
   });
-  for (var i = formattedApiData.length - 1; i >= 0; i--) {
-    console.info(formattedApiData[i]);
-  }
+  console.info(formattedApiData[0]);
   return formattedApiData;
 }
