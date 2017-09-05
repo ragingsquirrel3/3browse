@@ -1,7 +1,7 @@
 /*eslint-disable  no-unused-vars, quotes, mquote */
 import d3 from 'd3';
 
-var RADIUS = 1;
+var RADIUS = 0.1;
 var SEGS = 16;
 
 export default function renderFromData (rawData, isClear) {
@@ -45,7 +45,7 @@ export default function renderFromData (rawData, isClear) {
       radius: RADIUS,
       "segments-width": SEGS,
       "segments-height": SEGS,
-      position: function(d) { console.info(d); return d.lookPos; }
+      position: function(d) { return d.lookPos; }
     });
   elbows.exit().remove();
 
@@ -94,9 +94,9 @@ export default function renderFromData (rawData, isClear) {
 }
 
 function formatData(_raw) {
-  let raw = _raw.slice(0, 10);
+  let raw = _raw.slice(0, 250);
   // calc scale and regulate to 3d scale in meters
-  const DISTANCE = 10;
+  const DISTANCE = 15;
   // calc max spread of data
   let extentX = d3.extent(raw, d => d.x);
   let extentY = d3.extent(raw, d => d.y);
@@ -112,14 +112,13 @@ function formatData(_raw) {
   let distanceScale = d3.scale.linear().domain([0, maxDelta]).range([-DISTANCE, DISTANCE]);
   let distanceTransform = d => {
     return {
-      x: Math.round(d.x - mx),
-      y: Math.round(d.y - my),
-      z: Math.round(d.z - mz - 5)
+      x: Math.round(distanceScale(d.x - mx)) + 5,
+      y: Math.round(distanceScale(d.y - my)) + 15,
+      z: Math.round(distanceScale(d.z - mz)) + 5
     };
   };
   var formattedApiData = raw.map( function(d, i) {
     return distanceTransform(d);
   });
-  console.info(formattedApiData[0]);
   return formattedApiData;
 }

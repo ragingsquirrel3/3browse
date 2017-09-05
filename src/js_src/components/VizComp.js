@@ -3,7 +3,7 @@ import d3 from 'd3';
 
 import renderViz from '../lib/renderViz';
 
-// const INIT_DELAY = 500;
+const INIT_DELAY = 1500;
 const DATA_URL = '/public/data/example_yeast_data.json';
 
 class VizComp extends Component {
@@ -34,9 +34,12 @@ class VizComp extends Component {
     // let url = `${DATA_URL}?chrom=${chrom}&x=${p[0]}&y=${p[1]}&z=${p[2]}`;
     // or
     // simple
-    d3.json(DATA_URL, (err, json) => {
-      renderViz(json, true);
-    });
+    setTimeout(() => {
+      d3.json(DATA_URL, (err, json) => {
+        renderViz(json, true);
+      });
+    }, INIT_DELAY);
+
   }
 
   render() {

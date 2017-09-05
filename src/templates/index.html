@@ -53,6 +53,9 @@
         margin-right: 0 !important;
       }
     </style>
+    <script src="/public/aframe.min.js"></script>
+    <script src="/public/aframe-gamepad-controls.min.js"></script>
+    <script src="/public/a-frame-look-at.js"></script>
   </head>
   <body>
     <div id="appContainer" class="hide-for-small-only">
@@ -90,9 +93,6 @@
         </a-camera>
       </a-entity>
     </a-scene>
-    <script src="/public/aframe.min.js"></script>
-    <script src="/public/aframe-gamepad-controls.min.js"></script>
-    <script src="/public/a-frame-look-at.js"></script>
     {{ javascript_tag('main') | safe }}
   </body>
 </html>
