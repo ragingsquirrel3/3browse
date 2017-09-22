@@ -1,17 +1,35 @@
+.menu {
+  background: none !important;
+}
+
+.menu li label {
+  color: #fff;
+  margin-right: 0.5rem;
+}
+
+.modelSelector {
+  margin-right: 0.5rem !important;
+}
+
 .searchUberContainer {
   position: relative;
 }
 
 .searchIcon {
+  color: #333;
   position: absolute;
-  top: 0.7rem;
+  top: 0.6rem;
   left: 0.5rem;
 }
 
 .autoInput {
+  background: #fff;
   border: none !important;
+  border-radius: 4px;
+  color: #333;
   margin-right: 0 !important;
   padding-left: 1.75rem !important;
+  height: 36px;
 }
 
 .suggestionsContainer {
@@ -21,12 +39,12 @@
 
 .suggestionsList {
   margin: 0;
-  background: white;
+  background: #fff;
 }
 
 .suggestion {
   padding: 0.1rem 0.5rem;
-  background: white;
+  background: #fff;
 }
 
 .suggestionFocused {

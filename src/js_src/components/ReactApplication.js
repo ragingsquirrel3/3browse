@@ -2,6 +2,7 @@
 import Autosuggest from 'react-autosuggest';
 import React, { Component } from 'react';
 import d3 from 'd3';
+import Select from 'react-select';
 
 import style from './style.css';
 import VizComp from './VizComp';
@@ -111,9 +112,25 @@ class Layout extends Component {
       suggestion: style.suggestion,
       suggestionFocused: style.suggestionFocused
     };
+    let modelOptions = [
+      { value: 'model1', label: 'Saccharomyces cerevisiae ' }
+    ];
     return (
       <div>
-        <ul className='menu'>
+        <ul className={`menu ${style.menu}`}>
+          <li>
+            <label>Model</label>
+          </li>
+          <li> 
+            <div className={style.modelSelector}>
+              <Select
+                name='form-field-name'
+                options={modelOptions}
+                style={{ minWidth: '18rem' }}
+                value={modelOptions[0]}
+              />
+            </div>
+          </li>
           <li className={style.searchUberContainer}>
             <i className={`fa fa-search ${style.searchIcon}`} />
             <Autosuggest
