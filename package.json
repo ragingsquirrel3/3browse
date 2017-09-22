@@ -1,7 +1,7 @@
 {
-  "name": "vbrowse",
+  "name": "3browse",
   "version": "0.0.1",
-  "license": "MIT",
+  "license": "private",
   "author": {
     "name": "Travis Sheppard",
     "email": "travisksheppard@gmail.com"
