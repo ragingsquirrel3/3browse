@@ -1,4 +1,4 @@
-VBrowse
+3Browse
 ====================
 
 ## Development Setup
@@ -7,11 +7,9 @@ VBrowse
 
 * `source venv/bin/activate`
 
-* `pip install -r requirements.txt`
+* `make build`
 
-* `npm install`
-
-* `python app.py`
+* `make run`
 
 ## Deploy
 
