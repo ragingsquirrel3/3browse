@@ -2,9 +2,9 @@
 import d3 from 'd3';
 import _ from 'underscore';
 
-var RADIUS = 0.1;
+var RADIUS = 0.05;
 var SEGS = 16;
-var DATA_PER_NODE = 60;
+var DATA_PER_NODE = 40;
 var DEFAULT_COLOR = '#4390bc';
 
 export default function renderFromData (rawData, isClear) {
@@ -150,9 +150,9 @@ function formatData(raw) {
   let distanceScale = d3.scale.linear().domain([0, maxDelta]).range([-DISTANCE, DISTANCE]);
   let distanceTransform = d => {
     return _.extend(d, {
-      x: Math.round(distanceScale(d.x - mx)) + 5,
-      y: Math.round(distanceScale(d.y - my)) + 5,
-      z: Math.round(distanceScale(d.z - mz)) + 2,
+      x: distanceScale(d.x - mx) + 5,
+      y: distanceScale(d.y - my) + 5,
+      z: distanceScale(d.z - mz) + 2,
     });
   };
   var formattedApiData = raw.map( function(d, i) {
