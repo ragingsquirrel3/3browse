@@ -2,10 +2,16 @@
 import d3 from 'd3';
 import _ from 'underscore';
 
-var RADIUS = 0.05;
+var RADIUS = 0.125;
 var SEGS = 16;
-var DATA_PER_NODE = 40;
+var DATA_PER_NODE = 25;
+var LOW_FI_DATA_PER_NODE = 150;
+var FI_THRESHOLD = 2;
 var DEFAULT_COLOR = '#4390bc';
+
+var X_OFFSET = 3;
+var Y_OFFSET = 6;
+var Z_OFFSET = 4;
 
 export default function renderFromData (rawData, isClear) {
   var spaceRegulatedData = formatData(rawData);
@@ -17,9 +23,9 @@ export default function renderFromData (rawData, isClear) {
   }
   // clear
   target.html('');
-
+  var userPosition = document.querySelector('#vbrowse-camera').getAttribute('position');
   // render chromosomes
-  var chromData = formatChromData(spaceRegulatedData);
+  var chromData = formatChromData(spaceRegulatedData, userPosition);
   var colorScale = d3.scale.category20().domain(chromData.map( function(d) { return d.id; }));
   var chromNodes = target.selectAll('.chrom').data(chromData, function(d) { return d.id; });
   chromNodes.enter().append('a-entity')
@@ -55,18 +61,20 @@ export default function renderFromData (rawData, isClear) {
             "segments-radial": SEGS
           });
       });
-
-    // var elbows = sel.data(cylinderData);
-    // elbows.enter().append("a-sphere")
-    //   .attr({
-    //     class: "elbows",
-    //     color: "#4390bc",
-    //     radius: RADIUS,
-    //     "segments-width": SEGS,
-    //     "segments-height": SEGS,
-    //     position: function(_d) { return _d.lookPos; }
-    //   });
-    // elbows.exit().remove();
+    // sphere "elbows"
+    var elbows = sel.selectAll('.elbow').data(cylinderData);
+    elbows.enter().append('a-sphere')
+      .attr({
+        class: 'elbow',
+        color: function(_d) {
+          return colorScale(_d.chrom);
+        },
+        radius: RADIUS,
+        'segments-width': SEGS,
+        'segments-height': SEGS,
+        position: function(_d) { return _d.lookPos; }
+      });
+    elbows.exit().remove();
 
   // end chrom node work
   });
@@ -94,13 +102,14 @@ function formatCylinderData (raw) {
   return cylinderData;
 }
 
-function formatChromData(_raw) {
+function formatChromData(_raw, userPosition) {
   var chroms = _.groupBy(_raw, 'chrom');
   var keys = Object.keys(chroms);
   return keys.map( function(d, i) {
     // limit regins to one every DATA_PER_NODE
     var theseRegions = chroms[d].filter( function(_d, _i) {
-      return _i % DATA_PER_NODE === 0;
+      var filterNumber = (calcDistance(_d, userPosition) < FI_THRESHOLD) ? DATA_PER_NODE : LOW_FI_DATA_PER_NODE;
+      return _i % filterNumber === 0;
     });
     theseRegions = formatCylinderData(theseRegions);
     return {
@@ -150,9 +159,9 @@ function formatData(raw) {
   let distanceScale = d3.scale.linear().domain([0, maxDelta]).range([-DISTANCE, DISTANCE]);
   let distanceTransform = d => {
     return _.extend(d, {
-      x: distanceScale(d.x - mx) + 5,
-      y: distanceScale(d.y - my) + 5,
-      z: distanceScale(d.z - mz) + 2,
+      x: distanceScale(d.x - mx) + X_OFFSET,
+      y: distanceScale(d.y - my) + Y_OFFSET,
+      z: distanceScale(d.z - mz) + Z_OFFSET,
     });
   };
   var formattedApiData = raw.map( function(d, i) {
