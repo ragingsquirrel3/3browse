@@ -5,8 +5,8 @@ import _ from 'underscore';
 var RADIUS = 0.125;
 var SEGS = 16;
 var DATA_PER_NODE = 25;
-var LOW_FI_DATA_PER_NODE = 150;
-var FI_THRESHOLD = 2;
+var LOW_FI_DATA_PER_NODE = 50;
+var FI_THRESHOLD = 2.45;
 var DEFAULT_COLOR = '#4390bc';
 
 var X_OFFSET = 3;
