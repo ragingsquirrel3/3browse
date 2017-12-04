@@ -2,9 +2,7 @@
 import d3 from 'd3';
 import _ from 'underscore';
 
-var RADIUS = 0.05;
-var SEGS = 16;
-var DATA_PER_NODE = 40;
+var DATA_PER_NODE = 25;
 var DEFAULT_COLOR = '#4390bc';
 
 export default function renderFromData (rawData, isClear) {
@@ -28,46 +26,32 @@ export default function renderFromData (rawData, isClear) {
     });
   chromNodes.exit().remove();
   // begin chrom node work
-  chromNodes.each(function(d) {
+  chromNodes.each(function(d, i) {
     var sel = d3.select(this);
     var thisChromData = d.regions;
     var cylinderData = thisChromData;
-    var cylinderNodes = sel.selectAll('.region').data(cylinderData);
-    cylinderNodes.enter().append('a-entity')
+
+    var chromId =  'chrom' + i.toString();
+    var color = colorScale(thisChromData[0].chrom);
+
+    var curveTrack = sel.append('a-curve')
       .attr({
-        class: 'region'
-      });
-    cylinderNodes.exit().remove();
-    cylinderNodes
-      .attr({
-        position: function(_d) { return _d.position; },
-        "look-at": function(_d) { return _d.lookPos; }
-      }).each(function(_d) {
-        var _sel = d3.select(this);
-        var cylinder = _sel.append('a-cylinder')
-          .attr({
-            color: function(__d) {
-              return colorScale(_d.chrom);
-            },
-            rotation: '90 0 0',
-            height: function(_d) { return _d.height; },
-            radius: RADIUS,
-            "segments-radial": SEGS
-          });
+        id: chromId
       });
 
-    // var elbows = sel.data(cylinderData);
-    // elbows.enter().append("a-sphere")
-    //   .attr({
-    //     class: "elbows",
-    //     color: "#4390bc",
-    //     radius: RADIUS,
-    //     "segments-width": SEGS,
-    //     "segments-height": SEGS,
-    //     position: function(_d) { return _d.lookPos; }
-    //   });
-    // elbows.exit().remove();
+    var curvePoints = curveTrack.selectAll('.curvePoint').data(thisChromData);
+    curvePoints.enter().append('a-curve-point')
+      .attr({
+        class: 'curvePoint',
+        position: function(d) { return d.position; }
+      });
+    curvePoints.exit().remove();
 
+    var curve = sel.append('a-draw-curve')
+      .attr({
+        curveref: '#' + chromId,
+        material: 'shader: line; color: ' + color + ';'
+      });
   // end chrom node work
   });
 }
