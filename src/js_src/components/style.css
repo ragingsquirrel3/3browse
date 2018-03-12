@@ -9,6 +9,7 @@
 
 .modelSelector {
   margin-right: 0.5rem !important;
+  min-width: 24rem;
 }
 
 .searchUberContainer {

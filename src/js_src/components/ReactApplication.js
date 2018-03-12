@@ -10,6 +10,7 @@ import VizComp from './VizComp';
 const DATA_URL = '/public/geneData_2.0.json';
 const GENE_NAME_INDEX = 4;
 const MIN_SEARCH_CHAR = 2;
+import { DATA_MODELS } from '../constants';
 
 // <input className='searchInput' placeholder='Search' type='search' />
 class Layout extends Component {
@@ -98,6 +99,10 @@ class Layout extends Component {
     );
   }
 
+  renderOption(d) {
+    return <span key={`sOption${d}`}>{d.label} <i>{d.species}</i></span>;
+  }
+
   render() {
     const getSuggestionValue = d => d.name;
     const inputProps = {
@@ -112,9 +117,6 @@ class Layout extends Component {
       suggestion: style.suggestion,
       suggestionFocused: style.suggestionFocused
     };
-    let modelOptions = [
-      { value: 'model1', label: 'Saccharomyces cerevisiae ' }
-    ];
     return (
       <div>
         <ul className={`menu ${style.menu}`}>
@@ -125,9 +127,11 @@ class Layout extends Component {
             <div className={style.modelSelector}>
               <Select
                 name='form-field-name'
-                options={modelOptions}
+                optionRenderer={this.renderOption.bind(this)}
+                options={DATA_MODELS}
                 style={{ minWidth: '18rem' }}
-                value={modelOptions[0]}
+                value={DATA_MODELS[0]}
+                valueRenderer={this.renderOption.bind(this)}
               />
             </div>
           </li>
