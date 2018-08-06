@@ -1,5 +1,5 @@
 /*eslint-disable react/no-set-state */
-import Autosuggest from 'react-autosuggest';
+// import Autosuggest from 'react-autosuggest';
 import React, { Component } from 'react';
 import d3 from 'd3';
 import Select from 'react-select';
@@ -7,7 +7,7 @@ import Select from 'react-select';
 import style from './style.css';
 import VizComp from './VizComp';
 
-const DATA_URL = '/public/geneData_2.0.json';
+const DATA_URL = '/public/data/yeast_gene_data.json';
 const GENE_NAME_INDEX = 4;
 const MIN_SEARCH_CHAR = 2;
 import { DATA_MODELS } from '../constants';
@@ -53,7 +53,17 @@ class Layout extends Component {
 
   fetchData() {
     d3.json(DATA_URL, (err, json) => {
-      this.rawData = this.parseData(json);
+      console.info(json);
+      let _options = json.genes.map( d => {
+        return {
+          label: d.name,
+          value: d.name
+        };
+      });
+      this.setState({
+        options: _options
+      });
+      // this.rawData = this.parseData(json);
     });
   }
 
@@ -74,7 +84,9 @@ class Layout extends Component {
     if (input.value.length < MIN_SEARCH_CHAR) {
       return;
     }
+    console.info(this.rawData);
     let matches = this.rawData.filter( d => {
+      console.info(d);
       return d[GENE_NAME_INDEX].toLowerCase().startsWith(input.value.toLowerCase());
     });
     this.setState({
@@ -103,20 +115,29 @@ class Layout extends Component {
     return <span key={`sOption${d}`}>{d.label} <i>{d.species}</i></span>;
   }
 
+  handleChange(selectedOption) {
+    this.setState({ selectedOption });
+    this.setState({
+      values: selectedOption
+    });
+  }
+
   render() {
-    const getSuggestionValue = d => d.name;
-    const inputProps = {
-      placeholder: 'Search for a gene',
-      value: this.state.value,
-      onChange: this.onChange.bind(this)
-    };
-    let _theme = {
-      input: style.autoInput,
-      suggestionsContainer: style.suggestionsContainer,
-      suggestionsList: style.suggestionsList,
-      suggestion: style.suggestion,
-      suggestionFocused: style.suggestionFocused
-    };
+    // const getSuggestionValue = d => d.name;
+    // const inputProps = {
+    //   placeholder: 'Search for a gene',
+    //   value: this.state.value,
+    //   onChange: this.onChange.bind(this)
+    // };
+    // let _theme = {
+    //   input: style.autoInput,
+    //   suggestionsContainer: style.suggestionsContainer,
+    //   suggestionsList: style.suggestionsList,
+    //   suggestion: style.suggestion,
+    //   suggestionFocused: style.suggestionFocused
+    // };
+
+    const options = this.state.options;
     return (
       <div>
         <ul className={`menu ${style.menu}`}>
@@ -137,15 +158,12 @@ class Layout extends Component {
           </li>
           <li className={style.searchUberContainer}>
             <i className={`fa fa-search ${style.searchIcon}`} />
-            <Autosuggest
-              getSuggestionValue={getSuggestionValue}
-              inputProps={inputProps}
-              onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-              onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}  
-              renderSuggestion={this.renderSuggestion}
-              suggestions={this.state.suggestions}
-              theme={_theme}
+            <Select
+              isMulti
+              value={this.state.values}
+              onChange={this.handleChange.bind(this)}
+              options={options}
+              placeholder='Search gene name'
             />
           </li>
         </ul>
